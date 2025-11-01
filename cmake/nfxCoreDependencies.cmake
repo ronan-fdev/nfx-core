@@ -43,7 +43,7 @@ if(NFX_CORE_BUILD_TESTS)
 		set(GTEST_HAS_ABSL      OFF  CACHE BOOL  "Disable Abseil support in GoogleTest"  FORCE)
 
 		FetchContent_Declare(
-			googletest
+			googleTest
 			GIT_REPOSITORY https://github.com/google/googletest.git
 			GIT_TAG        v1.17.0
 			GIT_SHALLOW    TRUE
@@ -77,7 +77,7 @@ if(NFX_CORE_BUILD_BENCHMARKS)
 		set(ENABLE_ASSEMBLY_TESTS_DEFAULT    OFF  CACHE BOOL  "Enable assembly tests by default"               FORCE)
 
 		FetchContent_Declare(
-			googlebenchmark
+			googleBenchmark
 			GIT_REPOSITORY https://github.com/google/benchmark.git
 			GIT_TAG        v1.9.4
 			GIT_SHALLOW    TRUE
@@ -93,17 +93,13 @@ endif()
 
 if(NFX_CORE_BUILD_TESTS)
 	if(NOT GTest_FOUND)
-		FetchContent_MakeAvailable(
-			googletest
-		)
+		FetchContent_MakeAvailable(googleTest)
 	endif()
 endif()
 
 if(NFX_CORE_BUILD_BENCHMARKS)
 	if(NOT benchmark_FOUND)
-		FetchContent_MakeAvailable(
-			googlebenchmark
-		)
+		FetchContent_MakeAvailable(googleBenchmark)
 	endif()
 endif()
 

@@ -106,13 +106,14 @@ namespace nfx::core::hashing
 
 	/**
 	 * @brief Computes one step of the FNV-1a hash function.
+	 * @tparam FnvPrime The FNV prime constant for mixing (default: 0x01000193)
 	 * @param[in] hash The current hash value.
 	 * @param[in] ch The character (byte) to incorporate into the hash.
 	 * @return The updated hash value.
 	 * @see https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function
 	 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 	 */
-	template <uint32_t FnvPrime>
+	template <uint32_t FnvPrime = constants::DEFAULT_FNV_PRIME>
 	[[nodiscard]] inline constexpr uint32_t fnv1a( uint32_t hash, uint8_t ch ) noexcept;
 
 	/**
@@ -120,7 +121,6 @@ namespace nfx::core::hashing
 	 * @param[in] hash The current hash value.
 	 * @param[in] ch The character (byte) to incorporate into the hash.
 	 * @return The updated hash value.
-	 * @note Requires SSE4.2 support. Use hasSSE42Support() to check availability.
 	 * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
 	 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 	 */
@@ -134,6 +134,7 @@ namespace nfx::core::hashing
 	 * @return The final table index for the key (as size_t).
 	 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 	 */
+	template <uint64_t MixConstant = constants::DEFAULT_HASH_MIX_64>
 	[[nodiscard]] inline constexpr uint32_t seedMix( uint32_t seed, uint32_t hash, size_t size ) noexcept;
 
 	//----------------------------------------------
@@ -184,12 +185,31 @@ namespace nfx::core::hashing
 	//----------------------------
 
 	/**
-	 * @brief String hashing using SSE4.2/FNV-1a implementation
-	 * @param key String to hash
-	 * @return 32-bit hash value with excellent distribution
-	 * @details Uses hardware-accelerated CRC32 when available, falls back to FNV-1a
+	 * @brief High-performance string hashing using CRC32-C (Castagnoli) algorithm
+	 * @tparam InitialHash Initial seed value for the hash calculation (default: 0x811C9DC5)
+	 * @param key String view to hash
+	 * @return 32-bit CRC32-C hash value with excellent distribution properties
+	 *
+	 * @details This function implements the CRC32-C algorithm (polynomial 0x1EDC6F41) used by
+	 *          Intel/AMD SSE4.2 instructions and standardized in RFC 3385.
+	 *
+	 *          **Implementation Strategy:**
+	 *          - **With SSE4.2**: Uses hardware intrinsics (_mm_crc32_u8 or __builtin_ia32_crc32qi)
+	 *            for maximum performance when compiled with -msse4.2 (GCC/Clang) or /arch:AVX (MSVC)
+	 *          - **Without SSE4.2**: Falls back to optimized software implementation using the
+	 *            reflected polynomial (0x82F63B78) that produces identical results
+	 *
+	 *          **Cross-Platform Guarantees:**
+	 *          - Same hash values on all platforms (Windows/Linux, Intel/AMD x86, ARM)
+	 *          - Compile-time selection ensures consistent results within the same build
+	 *          - No runtime CPU detection - behavior determined at compile time
+	 *
+	 *          **Performance Characteristics:**
+	 *          - Hardware: ~1 cycle per byte on modern CPUs with SSE4.2
+	 *          - Software: ~8-10 cycles per byte (still very fast)
+	 *          - Empty strings return InitialHash immediately (O(1))
 	 */
-	template <uint32_t FnvOffsetBasis, uint32_t FnvPrime>
+	template <uint32_t InitialHash = constants::DEFAULT_FNV_OFFSET_BASIS>
 	[[nodiscard]] inline uint32_t hashStringView( std::string_view key ) noexcept;
 
 	//----------------------------

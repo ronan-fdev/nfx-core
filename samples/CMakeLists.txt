@@ -41,6 +41,15 @@ foreach(sample_source ${SAMPLE_SOURCES})
 		)
 
 		#----------------------------------------------
+		# Enable SSE4.2 for hardware-accelerated CRC32
+		#----------------------------------------------
+
+		target_compile_options(${sample_target_name} PRIVATE
+			$<$<CXX_COMPILER_ID:MSVC>:/arch:AVX>
+			$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-msse4.2>
+		)
+
+		#----------------------------------------------
 		# Properties
 		#----------------------------------------------
 
@@ -54,6 +63,5 @@ foreach(sample_source ${SAMPLE_SOURCES})
 			RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/samples"
 			RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/samples"
 		)
-
 	endif()
 endforeach()

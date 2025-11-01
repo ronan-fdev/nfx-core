@@ -37,44 +37,44 @@
 
 ### Short Strings (10 chars)
 
-| Operation                        | Linux GCC  | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
-| -------------------------------- | ---------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| `hashStringView()` (auto CRC32)  | 250 ns     | **240 ns**  | 272 ns            | 261 ns                | 435 ns                 | 523 ns       |
-| Manual FNV-1a                    | **202 ns** | 333 ns      | 270 ns            | 414 ns                | 432 ns                 | 389 ns       |
-| Manual CRC32 (SSE4.2)            | **203 ns** | 248 ns      | 285 ns            | 332 ns                | 342 ns                 | 345 ns       |
-| `std::hash<std::string_view>`    | 367 ns     | 423 ns      | 414 ns            | **285 ns**            | 353 ns                 | 392 ns       |
-| Single string `hashStringView()` | 17.6 ns    | **13.8 ns** | 28.7 ns           | 19.7 ns               | 21.4 ns                | 17.6 ns      |
-| Single string `std::hash`        | 4.87 ns    | **4.56 ns** | 8.49 ns           | 19.0 ns               | 20.2 ns                | 23.9 ns      |
+| Operation                        | Linux GCC   | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| -------------------------------- | ----------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
+| `hashStringView()` (auto CRC32)  | **216 ns**  | 267 ns      | 229 ns            | 369 ns                | 495 ns                 | 328 ns       |
+| Manual FNV-1a                    | **208 ns**  | 350 ns      | 225 ns            | 356 ns                | 484 ns                 | 229 ns       |
+| Manual CRC32 (SSE4.2)            | **207 ns**  | 238 ns      | 218 ns            | 308 ns                | 447 ns                 | 249 ns       |
+| `std::hash<std::string_view>`    | 362 ns      | 405 ns      | **303 ns**        | 330 ns                | 445 ns                 | 357 ns       |
+| Single string `hashStringView()` | 9.58 ns     | **8.69 ns** | 11.6 ns           | 13.3 ns               | 16.9 ns                | 10.8 ns      |
+| Single string `std::hash`        | **4.70 ns** | 4.84 ns     | 5.21 ns           | 20.1 ns               | 25.9 ns                | 15.3 ns      |
 
 ### Medium Strings (50 chars)
 
-| Operation                       | Linux GCC  | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
-| ------------------------------- | ---------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| `hashStringView()` (auto CRC32) | 687 ns     | **631 ns**  | 885 ns            | 767 ns                | 1022 ns                | 995 ns       |
-| Manual FNV-1a                   | 646 ns     | **589 ns**  | 884 ns            | 718 ns                | 948 ns                 | 1029 ns      |
-| Manual CRC32 (SSE4.2)           | 649 ns     | **598 ns**  | 961 ns            | 739 ns                | 912 ns                 | 896 ns       |
-| `std::hash<std::string_view>`   | **403 ns** | 436 ns      | 598 ns            | 767 ns                | 932 ns                 | 991 ns       |
+| Operation                       | Linux GCC | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| ------------------------------- | --------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
+| `hashStringView()` (auto CRC32) | 502 ns    | **447 ns**  | 536 ns            | 558 ns                | 820 ns                 | 600 ns       |
+| Manual FNV-1a                   | 624 ns    | **601 ns**  | 684 ns            | 808 ns                | 1014 ns                | 656 ns       |
+| Manual CRC32 (SSE4.2)           | 496 ns    | **438 ns**  | 1147 ns           | 609 ns                | 837 ns                 | 536 ns       |
+| `std::hash<std::string_view>`   | 419 ns    | 463 ns      | **413 ns**        | 863 ns                | 1151 ns                | 656 ns       |
 
 ### Long Strings (1000 chars)
 
 | Operation                       | Linux GCC   | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
 | ------------------------------- | ----------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| `hashStringView()` (auto CRC32) | 8389 ns     | **7222 ns** | 10820 ns          | 9812 ns               | 12691 ns               | 8970 ns      |
-| Manual FNV-1a                   | 8487 ns     | **7164 ns** | 11627 ns          | 9868 ns               | 12510 ns               | 13292 ns     |
-| Manual CRC32 (SSE4.2)           | 8553 ns     | **7243 ns** | 12374 ns          | 9923 ns               | 12025 ns               | 8970 ns      |
-| `std::hash<std::string_view>`   | **1161 ns** | 1236 ns     | 1850 ns           | 10272 ns              | 12296 ns               | 12796 ns     |
+| `hashStringView()` (auto CRC32) | 4923 ns     | **3955 ns** | 5885 ns           | 5534 ns               | 8231 ns                | 5156 ns      |
+| Manual FNV-1a                   | 7385 ns     | **7198 ns** | 8777 ns           | 10824 ns              | 13602 ns               | 7533 ns      |
+| Manual CRC32 (SSE4.2)           | 4840 ns     | **3921 ns** | 5766 ns           | 5952 ns               | 8045 ns                | 5052 ns      |
+| `std::hash<std::string_view>`   | **1115 ns** | 1249 ns     | 1266 ns           | 11254 ns              | 15381 ns               | 7615 ns      |
 
 ---
 
 ## Integer Hashing Operations
 
-| Operation                 | Linux GCC   | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
-| ------------------------- | ----------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| `hashInteger<uint32_t>()` | 1041 ns     | **645 ns**  | 1642 ns           | 875 ns                | 1014 ns                | 1030 ns      |
-| `hashInteger<uint64_t>()` | **784 ns**  | 1009 ns     | 1272 ns           | 1383 ns               | 1602 ns                | 1194 ns      |
-| `hashInteger<int32_t>()`  | 1057 ns     | **632 ns**  | 1685 ns           | 899 ns                | 1011 ns                | 1028 ns      |
-| `std::hash<uint32_t>`     | **95.9 ns** | 117 ns      | 156 ns            | 1585 ns               | 1819 ns                | 1472 ns      |
-| `std::hash<uint64_t>`     | 323 ns      | **90.8 ns** | 537 ns            | 2866 ns               | 3278 ns                | 2929 ns      |
+| Operation                 | Linux GCC  | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| ------------------------- | ---------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
+| `hashInteger<uint32_t>()` | **360 ns** | 579 ns      | 405 ns            | 802 ns                | 1087 ns                | 651 ns       |
+| `hashInteger<uint64_t>()` | **732 ns** | 1135 ns     | 825 ns            | 1697 ns               | 2148 ns                | 830 ns       |
+| `hashInteger<int32_t>()`  | **357 ns** | 561 ns      | 414 ns            | 825 ns                | 1032 ns                | 637 ns       |
+| `std::hash<uint32_t>`     | **107 ns** | 107 ns      | 119 ns            | 2407 ns               | 3026 ns                | 984 ns       |
+| `std::hash<uint64_t>`     | 295 ns     | **188 ns**  | 327 ns            | 3159 ns               | 3836 ns                | 1874 ns      |
 
 ---
 
@@ -82,20 +82,20 @@
 
 | Operation        | Linux GCC    | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
 | ---------------- | ------------ | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| `seedMix()`      | **0.119 ns** | 0.213 ns    | 0.150 ns          | 0.280 ns              | 0.378 ns               | 1.14 ns      |
-| Low-level FNV-1a | **0.108 ns** | 0.211 ns    | 0.142 ns          | 0.273 ns              | 0.391 ns               | 1.12 ns      |
-| Low-level CRC32  | **0.107 ns** | 0.213 ns    | 0.145 ns          | 0.273 ns              | 0.388 ns               | 1.15 ns      |
-| Low-level Larson | **0.107 ns** | 0.214 ns    | 0.146 ns          | 0.276 ns              | 0.375 ns               | 1.13 ns      |
+| `seedMix()`      | **0.106 ns** | 0.221 ns    | 0.124 ns          | 0.297 ns              | 0.436 ns               | 0.698 ns     |
+| Low-level FNV-1a | **0.106 ns** | 0.215 ns    | 0.124 ns          | 0.273 ns              | 0.411 ns               | 0.709 ns     |
+| Low-level CRC32  | **0.107 ns** | 0.217 ns    | 0.123 ns          | 0.283 ns              | 0.417 ns               | 0.715 ns     |
+| Low-level Larson | **0.106 ns** | 0.215 ns    | 0.124 ns          | 0.287 ns              | 0.424 ns               | 0.703 ns     |
 
 ---
 
 ## Cache-Sensitive Patterns
 
-| Operation               | Linux GCC | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
-| ----------------------- | --------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
-| Sequential 100 strings  | 3706 ns   | **3067 ns** | 5883 ns           | 4122 ns               | 4379 ns                | 3788 ns      |
-| Random 100 strings      | 10943 ns  | **7515 ns** | 17785 ns          | 11448 ns              | 11932 ns               | 15991 ns     |
-| Cache test (20 repeats) | 2367 ns   | **2155 ns** | 3998 ns           | 2931 ns               | 2935 ns                | 4772 ns      |
+| Operation               | Linux GCC   | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| ----------------------- | ----------- | ----------- | ----------------- | --------------------- | ---------------------- | ------------ |
+| Sequential 100 strings  | 3561 ns     | **2374 ns** | 3476 ns           | 3555 ns               | 4383 ns                | 3683 ns      |
+| Random 100 strings      | 9320 ns     | **4978 ns** | 10661 ns          | 7208 ns               | 8371 ns                | 9556 ns      |
+| Cache test (20 repeats) | **2214 ns** | 2322 ns     | 2530 ns           | 3982 ns               | 4778 ns                | 3345 ns      |
 
 ---
 

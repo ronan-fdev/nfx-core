@@ -61,6 +61,15 @@ foreach(test_source ${TEST_SOURCES})
 		)
 
 		#----------------------------------------------
+		# Enable SSE4.2 for hardware-accelerated CRC32
+		#----------------------------------------------
+
+		target_compile_options(${test_target_name} PRIVATE
+			$<$<CXX_COMPILER_ID:MSVC>:/arch:AVX>
+			$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-msse4.2>
+		)
+
+		#----------------------------------------------
 		# Properties
 		#----------------------------------------------
 

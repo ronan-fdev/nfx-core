@@ -135,6 +135,26 @@ target_link_libraries(your_target PRIVATE nfx-core::nfx-core)
 
 ### Building
 
+#### Performance Optimization (Optional)
+
+For best performance, compile with SSE4.2 support to enable hardware-accelerated CRC32 hashing:
+
+**Compiler Flags:**
+
+- **GCC/Clang**: Add `-msse4.2` flag
+- **MSVC**: Add `/arch:AVX` flag (minimum for SSE4.2 on MSVC)
+
+**CMake Example:**
+
+```cmake
+target_compile_options(your_target PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/arch:AVX>
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-msse4.2>
+)
+```
+
+**Note:** Without these flags, the library automatically falls back to FNV-1a software hashing (still fast, but not hardware-accelerated). The library works correctly either way thanks to runtime CPU detection.
+
 ```bash
 # Clone the repository
 git clone https://github.com/ronan-fdev/nfx-core.git
@@ -194,7 +214,7 @@ using namespace nfx::core;
 
 // Hash a string with FNV-1a
 uint32_t hash = hashing::hashStringView
-    <hashing::constants::DEFAULT_FNV_OFFSET_BASIS, hashing::constants::DEFAULT_FNV_PRIME>("example_key");
+    <hashing::constants::DEFAULT_FNV_OFFSET_BASIS>("example_key");
 
 // Check CPU capabilities
 if (cpu::hasSSE42Support())

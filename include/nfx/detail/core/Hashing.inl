@@ -25,11 +25,10 @@
 /**
  * @file Hashing.inl
  * @brief Implementation of core hash algorithms and infrastructure
- * @details Contains optimized hash functions with SSE4.2/FNV-1a for strings,
- *          multiplicative hashing for integers, and CPU feature detection
+ * @details Contains optimized hash functions using CRC32-C (Castagnoli) for strings with
+ *          hardware acceleration (SSE4.2) when available, FNV-1a for legacy support,
+ *          and multiplicative hashing for integers with proper avalanche properties
  */
-
-#include "nfx/core/CPU.h"
 
 namespace nfx::core::hashing
 {
@@ -51,23 +50,32 @@ namespace nfx::core::hashing
 	{
 		hash ^= ch;		  // XOR byte into hash first
 		hash *= FnvPrime; // Then multiply by prime
+
 		return hash;
 	}
 
 	inline uint32_t crc32( uint32_t hash, uint8_t ch ) noexcept
 	{
-#if defined( _MSC_VER ) && !defined( __clang__ )
-		// Pure MSVC compiler
+#if defined( _MSC_VER ) && !defined( __clang__ ) // Pure MSVC compiler
 		return _mm_crc32_u8( hash, ch );
-#elif defined( __SSE4_2__ )
-		// GCC, Clang, or Clang-CL with SSE4.2 support
+#elif defined( __SSE4_2__ ) // GCC, Clang, or Clang-CL with SSE4.2 support
 		return __builtin_ia32_crc32qi( hash, ch );
 #else
-		// This should never be reached due to runtime check, but ensures compilation
-		return fnv1a<constants::DEFAULT_FNV_PRIME>( hash, ch );
+		// Software implementation of CRC32-C (Castagnoli) matching SSE4.2 _mm_crc32_u8
+		// Polynomial: 0x1EDC6F41 (x^32 + x^28 + x^27 + x^26 + x^25 + x^23 + x^22 + ...)
+		constexpr uint32_t polynomial = 0x82F63B78;
+
+		uint32_t crc = hash ^ ch;
+		for ( int i = 0; i < 8; ++i )
+		{
+			crc = ( crc >> 1 ) ^ ( ( crc & 1 ) ? polynomial : 0 );
+		}
+
+		return crc;
 #endif
 	}
 
+	template <uint64_t MixConstant>
 	inline constexpr uint32_t seedMix( uint32_t seed, uint32_t hash, size_t size ) noexcept
 	{
 		// Mixes the primary hash with the seed to find the final table slot
@@ -79,9 +87,10 @@ namespace nfx::core::hashing
 		/*
 		 * Final step: Multiplicative hashing with 64-bit magic constant followed by modulo reduction.
 		 *
-		 * - Multiply by 0x2545F4914F6CDD1D: A carefully chosen 64-bit odd constant that ensures
+		 * - Multiply by MixConstant: A carefully chosen 64-bit odd constant that ensures
 		 *   good bit distribution and avalanche properties. The multiplication spreads the mixed
 		 *   bits of 'x' across the full 64-bit range, maximizing entropy.
+		 *   Default: 0x2545F4914F6CDD1D (constants::DEFAULT_HASH_MIX_64)
 		 *
 		 * - Bitwise AND with (size - 1): Fast modulo operation that works because 'size' is
 		 *   guaranteed to be a power of 2. This maps the large hash value to a valid table
@@ -89,7 +98,7 @@ namespace nfx::core::hashing
 		 *
 		 * - Cast to uint32_t: Return type matches the expected table index size.
 		 */
-		return static_cast<uint32_t>( ( x * constants::DEFAULT_HASH_MIX_64 ) & ( size - 1 ) );
+		return static_cast<uint32_t>( ( x * MixConstant ) & ( size - 1 ) );
 	}
 
 	//----------------------------------------------
@@ -101,6 +110,7 @@ namespace nfx::core::hashing
 		// FNV-1a style combination: XOR then multiply
 		existing ^= newHash;
 		existing *= prime;
+
 		return existing;
 	}
 
@@ -125,29 +135,19 @@ namespace nfx::core::hashing
 	// String hashing
 	//----------------------------
 
-	template <uint32_t FnvOffsetBasis, uint32_t FnvPrime>
+	template <uint32_t InitialHash>
 	inline uint32_t hashStringView( std::string_view key ) noexcept
 	{
 		if ( key.empty() )
 		{
-			return FnvOffsetBasis;
+			return InitialHash;
 		}
 
-		uint32_t hashValue = FnvOffsetBasis;
+		uint32_t hashValue = InitialHash;
 
-		if ( cpu::hasSSE42Support() )
+		for ( size_t i = 0; i < key.length(); ++i )
 		{
-			for ( size_t i = 0; i < key.length(); ++i )
-			{
-				hashValue = crc32( hashValue, static_cast<uint8_t>( key[i] ) );
-			}
-		}
-		else
-		{
-			for ( size_t i = 0; i < key.length(); ++i )
-			{
-				hashValue = fnv1a<FnvPrime>( hashValue, static_cast<uint8_t>( key[i] ) );
-			}
+			hashValue = crc32( hashValue, static_cast<uint8_t>( key[i] ) );
 		}
 
 		return hashValue;

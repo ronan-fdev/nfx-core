@@ -13,8 +13,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **GitHub Actions Workflows**
-  - `build-linux-gcc.yml` and `build-linux-clang.yml` now use `ubuntu-latest` instead of `ubuntu-24.04` for better maintainability
+- **Hashing**
+
+  - **BREAKING**: `hashStringView()` now always uses CRC32-C (no longer switches to FNV-1a)
+  - Added software CRC32-C fallback implementation (reflected polynomial 0x82F63B78)
+  - Removed runtime CPU detection - all algorithm selection now compile-time
+  - Hash consistency guaranteed: same build produces same hash values regardless of runtime CPU
+  - Software and hardware CRC32-C implementations produce identical results
+  - Template parameters now have defaults for better ergonomics:
+    - `fnv1a<>()` - FNV prime defaults to 0x01000193
+    - `seedMix<>()` - Mix constant defaults to 0x2545F4914F6CDD1D
+    - `hashStringView<>()` - Initial hash defaults to 0x811C9DC5
+  - Updated documentation to accurately reflect CRC32-C implementation strategy
+
+- **Benchmarks**
+
+  - Added SSE4.2 compiler flags (-msse4.2 for GCC/Clang, /arch:AVX for MSVC)
+  - Updated benchmark/README.md with complete results
+
+- **Tests**
+
+  - Added SSE4.2 compiler flags to test/CMakeLists.txt
+
+- **README.md**
+
+  - Added "Performance Optimization" section documenting SSE4.2 compiler flags
+  - Instructions for -msse4.2 (GCC/Clang) and /arch:AVX (MSVC)
+  - CMake example showing how to enable hardware acceleration
+
+  - **GitHub Actions Workflows**
+
+  - `build-linux-gcc.yml` and `build-linux-clang.yml` now use `ubuntu-latest` instead of `ubuntu-24.04`
   - `documentation.yml` trigger changed from `release: [published]` to `push: main` with path filters to prevent GitHub Pages protection errors
   - `documentation.yml` now automatically rebuilds when documentation-related files are modified (include/**, doc/**, README.md, CHANGELOG.md)
 

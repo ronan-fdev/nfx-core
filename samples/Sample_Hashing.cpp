@@ -36,7 +36,7 @@ int main()
 	for ( const auto& str : testStrings )
 	{
 		using namespace nfx::core::hashing;
-		const uint32_t hash{ hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS, constants::DEFAULT_FNV_PRIME>( str ) };
+		const uint32_t hash{ hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS>( str ) };
 
 		std::cout << "  \"" << std::setw( 45 ) << str << "\" -> 0x" << std::hex << std::setw( 16 ) << std::setfill( '0' ) << hash << std::dec << std::setfill( ' ' ) << std::endl;
 	}
@@ -76,8 +76,8 @@ int main()
 		[[nodiscard]] size_t hash() const
 		{
 			using namespace nfx::core::hashing;
-			size_t h{ hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS, constants::DEFAULT_FNV_PRIME>( firstName ) };
-			h = combine( h, hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS, constants::DEFAULT_FNV_PRIME>( lastName ) );
+			size_t h{ hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS>( firstName ) };
+			h = combine( h, hashStringView<constants::DEFAULT_FNV_OFFSET_BASIS>( lastName ) );
 			h = combine( h, hashInteger( age ) );
 			return h;
 		}
@@ -108,7 +108,7 @@ int main()
 	{
 		[[nodiscard]] size_t operator()( const std::string_view sv ) const noexcept
 		{
-			return nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS, nfx::core::hashing::constants::DEFAULT_FNV_PRIME>( sv );
+			return nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS>( sv );
 		}
 	};
 
@@ -190,7 +190,7 @@ int main()
 	std::cout << "  Result:  0x" << std::hex << std::setw( 16 ) << std::setfill( '0' ) << manualHash << std::dec << std::setfill( ' ' ) << std::endl;
 
 	// Verify against library function
-	const uint32_t libraryHash{ nfx::core::hashing::hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( manualInput ) };
+	const uint32_t libraryHash{ nfx::core::hashing::hashStringView<DEFAULT_FNV_OFFSET_BASIS>( manualInput ) };
 	std::cout << "  Library: 0x" << std::hex << std::setw( 16 ) << std::setfill( '0' ) << libraryHash << std::dec << std::setfill( ' ' ) << std::endl;
 	std::cout << "  Match:   " << ( manualHash == libraryHash ? "YES" : "NO" ) << std::endl;
 
@@ -216,7 +216,7 @@ int main()
 	uint64_t hashSum{}; // Prevent optimization
 	for ( const auto& str : testData )
 	{
-		hashSum += nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS, nfx::core::hashing::constants::DEFAULT_FNV_PRIME>( str );
+		hashSum += nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS>( str );
 	}
 
 	auto endTime{ std::chrono::high_resolution_clock::now() };
@@ -249,7 +249,7 @@ int main()
 	std::cout << "Similar strings (testing avalanche effect):" << std::endl;
 	for ( const auto& str : similarStrings )
 	{
-		const uint32_t hash{ nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS, nfx::core::hashing::constants::DEFAULT_FNV_PRIME>( str ) };
+		const uint32_t hash{ nfx::core::hashing::hashStringView<nfx::core::hashing::constants::DEFAULT_FNV_OFFSET_BASIS>( str ) };
 		std::cout << "  \"" << std::setw( 10 ) << str << "\" -> 0x" << std::hex << std::setw( 16 ) << std::setfill( '0' ) << hash << std::dec << std::setfill( ' ' ) << std::endl;
 	}
 

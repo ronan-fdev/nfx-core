@@ -88,7 +88,7 @@ namespace nfx::core::hashing::test
 
 	TEST( HashingString, EmptyString )
 	{
-		uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "" );
+		uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "" );
 
 		// Empty string should return offset basis (FNV-1a behavior)
 		EXPECT_EQ( hash, DEFAULT_FNV_OFFSET_BASIS );
@@ -96,9 +96,9 @@ namespace nfx::core::hashing::test
 
 	TEST( HashingString, SimpleStrings )
 	{
-		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "test" );
-		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "test" );
-		auto hash3 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "Test" );
+		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "test" );
+		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "test" );
+		auto hash3 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "Test" );
 
 		// Same input -> same output
 		EXPECT_EQ( hash1, hash2 );
@@ -109,9 +109,9 @@ namespace nfx::core::hashing::test
 
 	TEST( HashingString, LongerStrings )
 	{
-		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "The quick brown fox jumps over the lazy dog" );
-		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "The quick brown fox jumps over the lazy dog" );
-		auto hash3 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "The quick brown fox jumps over the lazy cat" );
+		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "The quick brown fox jumps over the lazy dog" );
+		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "The quick brown fox jumps over the lazy dog" );
+		auto hash3 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "The quick brown fox jumps over the lazy cat" );
 
 		// Same input -> same output
 		EXPECT_EQ( hash1, hash2 );
@@ -125,8 +125,8 @@ namespace nfx::core::hashing::test
 		std::string str{ "consistency test" };
 		std::string_view view{ str };
 
-		auto hashFromView = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( view );
-		auto hashFromString = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( str );
+		auto hashFromView = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( view );
+		auto hashFromString = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( str );
 
 		// Should produce identical hashes
 		EXPECT_EQ( hashFromView, hashFromString );
@@ -233,17 +233,17 @@ namespace nfx::core::hashing::test
 		// Combine multiple hashes sequentially
 		uint32_t result{ 0 };
 
-		result = combine( result, hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "name" ), DEFAULT_FNV_PRIME );
+		result = combine( result, hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "name" ), DEFAULT_FNV_PRIME );
 		result = combine( result, hashInteger( 42 ), DEFAULT_FNV_PRIME );
-		result = combine( result, hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "value" ), DEFAULT_FNV_PRIME );
+		result = combine( result, hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "value" ), DEFAULT_FNV_PRIME );
 
 		EXPECT_NE( result, 0u );
 
 		// Same sequence should produce same result
 		uint32_t result2{ 0 };
-		result2 = combine( result2, hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "name" ), DEFAULT_FNV_PRIME );
+		result2 = combine( result2, hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "name" ), DEFAULT_FNV_PRIME );
 		result2 = combine( result2, hashInteger( 42 ), DEFAULT_FNV_PRIME );
-		result2 = combine( result2, hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( "value" ), DEFAULT_FNV_PRIME );
+		result2 = combine( result2, hashStringView<DEFAULT_FNV_OFFSET_BASIS>( "value" ), DEFAULT_FNV_PRIME );
 
 		EXPECT_EQ( result, result2 );
 	}
@@ -297,7 +297,7 @@ namespace nfx::core::hashing::test
 		std::unordered_set<uint32_t> uniqueHashes;
 		for ( const auto& str : testStrings )
 		{
-			uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( str );
+			uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( str );
 			uniqueHashes.insert( hash );
 		}
 
@@ -344,13 +344,13 @@ namespace nfx::core::hashing::test
 	TEST( HashingEdgeCases, VeryLongStrings )
 	{
 		std::string longString( 10000, 'X' );
-		uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( longString );
+		uint32_t hash = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( longString );
 
 		EXPECT_NE( hash, DEFAULT_FNV_OFFSET_BASIS );
 
 		// Same content should produce same hash
 		std::string longString2( 10000, 'X' );
-		uint32_t hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( longString2 );
+		uint32_t hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( longString2 );
 		EXPECT_EQ( hash, hash2 );
 	}
 
@@ -359,8 +359,8 @@ namespace nfx::core::hashing::test
 		std::string_view sv1( "\n\t\r\0test", 8 );
 		std::string_view sv2( "\n\t\r\0test", 8 );
 
-		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( sv1 );
-		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS, DEFAULT_FNV_PRIME>( sv2 );
+		auto hash1 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( sv1 );
+		auto hash2 = hashStringView<DEFAULT_FNV_OFFSET_BASIS>( sv2 );
 
 		EXPECT_EQ( hash1, hash2 );
 		EXPECT_NE( hash1, DEFAULT_FNV_OFFSET_BASIS );
