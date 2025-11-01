@@ -13,6 +13,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- NIL
+
+### Deprecated
+
+- NIL
+
+### Removed
+
+- NIL
+
+### Fixed
+
+- NIL
+
+### Security
+
+- NIL
+
+## [2.0.0] - 2025-11-01
+
+### Changed
+
 - **Hashing**
 
   - **BREAKING**: `hashStringView()` now always uses CRC32-C (no longer switches to FNV-1a)
@@ -47,21 +69,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `documentation.yml` trigger changed from `release: [published]` to `push: main` with path filters to prevent GitHub Pages protection errors
   - `documentation.yml` now automatically rebuilds when documentation-related files are modified (include/**, doc/**, README.md, CHANGELOG.md)
 
-### Deprecated
-
-- NIL
-
-### Removed
-
-- NIL
-
 ### Fixed
 
 - GitHub Pages deployment errors when publishing releases from tags
-
-### Security
-
-- NIL
 
 ## [1.0.0] - 2025-11-01 - Initial Release
 

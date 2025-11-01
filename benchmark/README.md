@@ -22,12 +22,12 @@
 
 | Platform    | Benchmark Framework     | C++ Compiler              | nfx-core Version |
 | ----------- | ----------------------- | ------------------------- | ---------------- |
-| **Linux**   | Google Benchmark v1.9.4 | GCC 14.2.0-x64            | v1.0.0           |
-| **Linux**   | Google Benchmark v1.9.4 | Clang 19.1.7-x64          | v1.0.0           |
-| **Windows** | Google Benchmark v1.9.4 | MinGW GCC 14.2.0-x64      | v1.0.0           |
-| **Windows** | Google Benchmark v1.9.4 | Clang-GNU-CLI 19.1.5-x64  | v1.0.0           |
-| **Windows** | Google Benchmark v1.9.4 | Clang-MSVC-CLI 19.1.5-x64 | v1.0.0           |
-| **Windows** | Google Benchmark v1.9.4 | MSVC 19.44.35217.0-x64    | v1.0.0           |
+| **Linux**   | Google Benchmark v1.9.4 | GCC 14.2.0-x64            | v2.0.0           |
+| **Linux**   | Google Benchmark v1.9.4 | Clang 19.1.7-x64          | v2.0.0           |
+| **Windows** | Google Benchmark v1.9.4 | MinGW GCC 14.2.0-x64      | v2.0.0           |
+| **Windows** | Google Benchmark v1.9.4 | Clang-GNU-CLI 19.1.5-x64  | v2.0.0           |
+| **Windows** | Google Benchmark v1.9.4 | Clang-MSVC-CLI 19.1.5-x64 | v2.0.0           |
+| **Windows** | Google Benchmark v1.9.4 | MSVC 19.44.35217.0-x64    | v2.0.0           |
 
 ---
 

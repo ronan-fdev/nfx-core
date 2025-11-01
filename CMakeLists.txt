@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(nfx-core
-	VERSION 1.0.0
+	VERSION 2.0.0
 	DESCRIPTION "Cross-platform C++ core utilities library - Foundation of the nfx ecosystem with hashing algorithms and CPU feature detection"
 	HOMEPAGE_URL "https://github.com/ronan-fdev/nfx-core"
 	LANGUAGES CXX
