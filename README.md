@@ -85,8 +85,10 @@ option(NFX_CORE_BUILD_SAMPLES        "Build samples"                      OFF )
 option(NFX_CORE_BUILD_BENCHMARKS     "Build benchmarks"                   OFF )
 option(NFX_CORE_BUILD_DOCUMENTATION  "Build Doxygen documentation"        OFF )
 
-# Installation and packaging
+# Installation
 option(NFX_CORE_INSTALL_PROJECT      "Install project"                    OFF )
+
+# Packaging
 option(NFX_CORE_PACKAGE_SOURCE       "Enable source package generation"   OFF )
 option(NFX_CORE_PACKAGE_ARCHIVE      "Enable TGZ/ZIP package generation"  OFF )
 option(NFX_CORE_PACKAGE_DEB          "Enable DEB package generation"      OFF )

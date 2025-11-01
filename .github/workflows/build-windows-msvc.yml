@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - "include/**"
-      - "src/**"
       - "test/**"
       - "samples/**"
       - "benchmark/**"
@@ -15,7 +14,6 @@ on:
     branches: [main]
     paths:
       - "include/**"
-      - "src/**"
       - "test/**"
       - "samples/**"
       - "benchmark/**"
@@ -45,7 +43,7 @@ jobs:
           path: |
             build
             C:\Users\runneradmin\AppData\Local\Microsoft\MSBuild
-          key: ${{ runner.os }}-msvc2022-cmake-${{ hashFiles('**/CMakeLists.txt', 'include/**', 'src/**') }}
+          key: ${{ runner.os }}-msvc2022-cmake-${{ hashFiles('**/CMakeLists.txt', 'include/**') }}
           restore-keys: |
             ${{ runner.os }}-msvc2022-cmake-
 

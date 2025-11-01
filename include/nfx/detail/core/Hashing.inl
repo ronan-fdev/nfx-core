@@ -41,7 +41,7 @@ namespace nfx::core::hashing
 	// Low-level hash building blocks
 	//----------------------------------------------
 
-	[[maybe_unused]] inline constexpr uint32_t Larson( uint32_t hash, uint8_t ch ) noexcept
+	inline constexpr uint32_t Larson( uint32_t hash, uint8_t ch ) noexcept
 	{
 		return 37 * hash + ch;
 	}

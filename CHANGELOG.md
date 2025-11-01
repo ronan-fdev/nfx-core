@@ -13,7 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- NIL
+- **GitHub Actions Workflows**
+  - `build-linux-gcc.yml` and `build-linux-clang.yml` now use `ubuntu-latest` instead of `ubuntu-24.04` for better maintainability
+  - `documentation.yml` trigger changed from `release: [published]` to `push: main` with path filters to prevent GitHub Pages protection errors
+  - `documentation.yml` now automatically rebuilds when documentation-related files are modified (include/**, doc/**, README.md, CHANGELOG.md)
 
 ### Deprecated
 
@@ -25,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- NIL
+- GitHub Pages deployment errors when publishing releases from tags
 
 ### Security
 
